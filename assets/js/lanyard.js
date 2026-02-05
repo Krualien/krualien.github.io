@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const userId = '1441770577353244772'; //replace your discord id here
+  const userId = '1441770577353244772'; // 👉 đổi ID Discord ở đây
   const apiUrl = `https://api.lanyard.rest/v1/users/${userId}`;
   
   const avatar = document.getElementById('discord-avatar');
@@ -12,57 +12,69 @@ document.addEventListener('DOMContentLoaded', () => {
   const activityDetails = document.getElementById('discord-activity-details');
   const activityState = document.getElementById('discord-activity-state');
   const albumArt = document.getElementById('discord-album-art');
-  
+
   async function updateDiscordStatus() {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
-      
-      if (data.success) {
-        const discord = data.data;
-        
-        const avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${discord.discord_user.avatar}.png`;
-        avatar.src = avatarUrl;
-        
-        username.textContent = discord.discord_user.username;
-        
-        const status = discord.discord_status || 'offline';
-        statusDot.className = `status-${status}`;
-        statusText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
-        
-        const activity = discord.activities.find(a => a.type === 0);
-        
-        if (activity) {
-          activityInfo.classList.remove('hidden');
-          noActivity.classList.add('hidden');
-          
-          activityName.textContent = activity.name;
-          activityDetails.textContent = activity.details || '';
-          activityState.textContent = activity.state || '';
-          
-          if (activity.assets?.large_image) {
-            const assetUrl = getAssetUrl(activity.assets.large_image, activity.application_id);
-            albumArt.style.backgroundImage = `url('${assetUrl}')`;
-          } else {
-            albumArt.style.backgroundImage = '';
-          }
+
+      if (!data.success) return;
+
+      const discord = data.data;
+
+      /* ===== FIX AVATAR (CHỖ QUAN TRỌNG) ===== */
+      const avatarHash = discord.discord_user.avatar;
+      const avatarUrl = avatarHash
+        ? `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.png?size=256`
+        : `https://cdn.discordapp.com/embed/avatars/0.png`;
+
+      avatar.src = avatarUrl;
+
+      /* ===== USERNAME ===== */
+      username.textContent = discord.discord_user.username;
+
+      /* ===== STATUS ===== */
+      const status = discord.discord_status || 'offline';
+      statusDot.className = `status-${status}`;
+      statusText.textContent =
+        status.charAt(0).toUpperCase() + status.slice(1);
+
+      /* ===== ACTIVITY ===== */
+      const activity = discord.activities.find(a => a.type === 0);
+
+      if (activity) {
+        activityInfo.classList.remove('hidden');
+        noActivity.classList.add('hidden');
+
+        activityName.textContent = activity.name || '';
+        activityDetails.textContent = activity.details || '';
+        activityState.textContent = activity.state || '';
+
+        if (activity.assets && activity.assets.large_image) {
+          const assetUrl = getAssetUrl(
+            activity.assets.large_image,
+            activity.application_id
+          );
+          albumArt.style.backgroundImage = `url('${assetUrl}')`;
         } else {
-          activityInfo.classList.add('hidden');
-          noActivity.classList.remove('hidden');
+          albumArt.style.backgroundImage = '';
         }
+      } else {
+        activityInfo.classList.add('hidden');
+        noActivity.classList.remove('hidden');
       }
-    } catch (error) {
-      console.error('Error fetching Discord status:', error);
+    } catch (err) {
+      console.error('Error fetching Discord status:', err);
     }
   }
-  
+
   function getAssetUrl(asset, applicationId) {
     if (asset.startsWith('mp:')) {
       return `https://media.discordapp.net/${asset.replace('mp:', '')}`;
     }
     return `https://cdn.discordapp.com/app-assets/${applicationId}/${asset}.png`;
   }
-  
+
   updateDiscordStatus();
   setInterval(updateDiscordStatus, 10000);
 });
