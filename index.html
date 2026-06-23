@@ -1,1053 +1,119 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NovaTech - Nền tảng MXH thế hệ mới</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #0b111e;
-            color: #f1f5f9;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-        }
-
-        @keyframes countUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(11, 17, 30, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        header.scrolled {
-            background: #0b111e;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        header .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 80px;
-            position: relative;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 22px;
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-            z-index: 1001;
-        }
-
-        .logo-icon-wrapper {
-            position: relative;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-arrow {
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 16px solid #3b82f6;
-            transform: translateY(-2px);
-            z-index: 2;
-        }
-
-        .logo-orbit {
-            position: absolute;
-            width: 30px;
-            height: 14px;
-            border: 2.5px solid #ffffff;
-            border-radius: 50%;
-            transform: rotate(-25deg);
-            border-top-color: transparent;
-            z-index: 1;
-        }
-
-        .logo-dot {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: #3b82f6;
-            border-radius: 50%;
-            top: 2px;
-            right: 2px;
-            z-index: 3;
-        }
-
-        .logo span {
-            color: #3b82f6;
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 32px;
-        }
-
-        nav ul a {
-            font-size: 15px;
-            font-weight: 500;
-            color: #94a3b8;
-            transition: color 0.2s ease;
-            position: relative;
-        }
-
-        nav ul a:hover {
-            color: #3b82f6;
-        }
-
-        nav ul a::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #3b82f6;
-            transition: width 0.2s ease;
-            border-radius: 2px;
-        }
-
-        nav ul a:hover::after {
-            width: 100%;
-        }
-
-        .header-btns {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .btn-login {
-            font-size: 15px;
-            font-weight: 600;
-            color: #94a3b8;
-            padding: 10px 20px;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-login:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .btn-cta {
-            font-size: 15px;
-            font-weight: 600;
-            color: #ffffff;
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            padding: 10px 24px;
-            border-radius: 10px;
-            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .btn-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
-        }
-
-        .menu-toggle {
-            display: none;
-            font-size: 24px;
-            color: #ffffff;
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        .hero {
-            padding: 180px 0 100px 0;
-            background: radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.15) 0%, rgba(11, 17, 30, 0) 50%),
-                        radial-gradient(circle at 15% 75%, rgba(139, 92, 246, 0.1) 0%, rgba(11, 17, 30, 0) 50%);
-            overflow: hidden;
-        }
-
-        .hero .container {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            align-items: center;
-            gap: 48px;
-        }
-
-        .hero-sub {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(59, 130, 246, 0.1);
-            color: #60a5fa;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        .hero-sub i {
-            font-size: 12px;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.15;
-            letter-spacing: -1.5px;
-            margin-bottom: 24px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: #94a3b8;
-            margin-bottom: 40px;
-            max-width: 540px;
-        }
-
-        .hero-btns {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 48px;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #0f172a;
-            background: #ffffff;
-            padding: 14px 32px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            background: #f1f5f9;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #f1f5f9;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 14px 32px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 48px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 32px;
-        }
-
-        .stat-box h3 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 4px;
-            font-variant-numeric: tabular-nums;
-            animation: countUp 1s ease-out forwards;
-        }
-
-        .stat-box p {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 0;
-        }
-
-        .hero-visual {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .visual-bg {
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%);
-            border-radius: 50%;
-            filter: blur(40px);
-            z-index: 1;
-            animation: pulseGlow 8s ease-in-out infinite;
-        }
-
-        .mockup-card {
-            background: #111827;
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            width: 100%;
-            max-width: 440px;
-            position: relative;
-            z-index: 2;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .mockup-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .mockup-user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .mockup-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-            border-radius: 50%;
-        }
-
-        .mockup-name {
-            width: 100px;
-            height: 12px;
-            background: #1e293b;
-            border-radius: 6px;
-        }
-
-        .mockup-badge {
-            width: 60px;
-            height: 24px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 12px;
-        }
-
-        .mockup-body {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .mockup-item {
-            background: #1f2937;
-            border-radius: 16px;
-            height: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            transition: all 0.3s ease;
-        }
-
-        .mockup-item:hover {
-            transform: translateY(-4px);
-            background: #273142;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .mockup-item i {
-            font-size: 24px;
-            color: #64748b;
-        }
-
-        .mockup-item.active {
-            background: rgba(59, 130, 246, 0.15);
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-
-        .mockup-item.active i {
-            color: #3b82f6;
-        }
-
-        .features {
-            padding: 100px 0;
-            background: #0f172a;
-            perspective: 1200px;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 64px auto;
-        }
-
-        .section-header h2 {
-            font-size: 36px;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -1px;
-            margin-bottom: 16px;
-        }
-
-        .section-header p {
-            font-size: 16px;
-            color: #94a3b8;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-        }
-
-        .feature-card {
-            background: #1e293b;
-            border-radius: 20px;
-            padding: 40px 32px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s, background 0.3s, border-color 0.3s;
-            opacity: 0;
-        }
-
-        .feature-card:nth-child(1) { animation-delay: 0s; }
-        .feature-card:nth-child(2) { animation-delay: 1.5s; }
-        .feature-card:nth-child(3) { animation-delay: 0.7s; }
-
-        .feature-card.visible {
-            opacity: 1;
-        }
-
-        .feature-card:hover {
-            animation-play-state: paused;
-            transform: translateY(-15px) rotateX(8deg) rotateY(-8deg) scale(1.03);
-            background: #24334d;
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
-            border-color: #3b82f6;
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: #3b82f6;
-            margin-bottom: 28px;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s;
-        }
-
-        .feature-card:hover .feature-icon {
-            background: #3b82f6;
-            color: #ffffff;
-            transform: translateZ(30px) scale(1.1);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-        }
-
-        .feature-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            font-size: 15px;
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-
-        .platforms {
-            padding: 100px 0;
-            background: #0b111e;
-        }
-
-        .platforms-content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 48px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .platform-item {
-            background: #1e293b;
-            border-radius: 20px;
-            padding: 32px;
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .platform-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .platform-item:hover {
-            transform: translateY(-4px);
-            background: #24334d;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .platform-item i {
-            font-size: 36px;
-            color: #94a3b8;
-            transition: color 0.2s ease;
-        }
-
-        .platform-item:hover i.fa-tiktok { color: #ffffff; }
-        .platform-item i.fa-youtube { color: #ff0000; }
-        .platform-item i.fa-facebook { color: #1877f2; }
-        .platform-item i.fa-instagram { color: #e1306c; }
-
-        .platform-info h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 6px;
-        }
-
-        .platform-info p {
-            font-size: 14px;
-            color: #94a3b8;
-            line-height: 1.5;
-        }
-
-        .cta {
-            padding: 100px 0;
-            background: #0f172a;
-            text-align: center;
-        }
-
-        .cta-box {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 32px;
-            padding: 72px 24px;
-            color: #ffffff;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            opacity: 0;
-            transform: scale(0.95);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .cta-box.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .cta-bg-glow {
-            position: absolute;
-            top: -50%;
-            left: -20%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
-            z-index: 1;
-        }
-
-        .cta-box h2 {
-            font-size: 40px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 16px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .cta-box p {
-            font-size: 18px;
-            color: #94a3b8;
-            max-width: 540px;
-            margin: 0 auto 40px auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .cta-box .btn-cta {
-            padding: 16px 40px;
-            font-size: 16px;
-            border-radius: 12px;
-            position: relative;
-            z-index: 2;
-            display: inline-flex;
-        }
-
-        footer {
-            background: #0b111e;
-            color: #64748b;
-            padding: 48px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        footer .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-        }
-
-        .footer-logo .logo-arrow {
-            border-bottom-color: #3b82f6;
-        }
-
-        .footer-logo .logo-orbit {
-            border-color: #ffffff;
-        }
-
-        .footer-logo .logo-dot {
-            background-color: #3b82f6;
-        }
-
-        .footer-logo span {
-            color: #3b82f6;
-        }
-
-        .footer-contact {
-            font-size: 15px;
-            color: #94a3b8;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .footer-contact a {
-            color: #3b82f6;
-            font-weight: 600;
-            transition: color 0.2s ease;
-        }
-
-        .footer-contact a:hover {
-            color: #60a5fa;
-            text-decoration: underline;
-        }
-
-        footer p {
-            font-size: 14px;
-        }
-
-        @media (max-width: 1024px) {
-            .hero h1 { font-size: 46px; }
-            .features-grid { gap: 24px; }
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            
-            nav {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: #0b111e;
-                padding: 40px 24px;
-                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                gap: 40px;
-                z-index: 1000;
-            }
-
-            nav.active { left: 0; }
-
-            nav ul {
-                flex-direction: column;
-                gap: 28px;
-            }
-
-            nav ul a { font-size: 20px; color: #ffffff; }
-
-            nav .header-btns {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                 gap: 16px;
-                margin-top: 20px;
-            }
-                
-                nav .header-btns a {
-                width: 100%;
-                text-align: center;
-                padding: 14px;
-                font-size: 16px;
-            }
-
-            header > .container > .header-btns {
-                display: none;
-            }
-
-            .hero { padding: 140px 0 64px 0; }
-            .hero .container { grid-template-columns: 1fr; text-align: center; gap: 48px; }
-            .hero p { margin: 0 auto 32px auto; }
-            .hero-btns { justify-content: center; }
-            .hero-stats { justify-content: center; gap: 32px; }
-            .hero-visual { order: -1; }
-
-            .features-grid { grid-template-columns: 1fr; gap: 24px; }
-            .platforms-content { grid-template-columns: 1fr; gap: 20px; }
-            
-            .cta-box { padding: 48px 20px; }
-            .cta-box h2 { font-size: 30px; }
-            .cta-box p { font-size: 16px; }
-        }
-    </style>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" type="image/x-icon" href="./assets/favico/default.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <link rel="stylesheet" href="./assets/css/tilt-effect.css">
 </head>
 <body>
-
-    <header id="header">
-        <div class="container">
-            <div class="logo">
-                <div class="logo-icon-wrapper">
-                    <div class="logo-arrow"></div>
-                    <div class="logo-orbit"></div>
-                    <div class="logo-dot"></div>
-                </div>
-                Nova<span>Tech</span>
-            </div>
-            
-            <nav id="nav-menu">
-                <ul>
-                    <li><a href="#features">Tính năng</a></li>
-                    <li><a href="#platforms">Nền tảng</a></li>
-                    <li><a href="#pricing">Bảng giá</a></li>
-                    <li><a href="#blog">Blog</a></li>
-                </ul>
-                <div class="header-btns">
-                    <a href="#" class="btn-login">Đăng nhập</a>
-                    <a href="#" class="btn-cta">Dùng thử miễn phí</a>
-                </div>
-            </nav>
-
-            <div class="menu-toggle" id="menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
+  <div id="terminal">
+    <div id="terminal-header">
+      <div id="terminal-buttons">
+        <div class="terminal-button" id="close-button"></div>
+        <div class="terminal-button" id="minimize-button"></div>
+        <div class="terminal-button" id="maximize-button"></div>
+      </div>
+    </div>
+    <div id="terminal-content">
+      <p id="terminal-text"></p>
+    </div>
+  </div>
+  <div id="video-background">
+    <video autoplay muted loop id="myVideo">
+      <source src="./assets/back/default.mp4" type="video/mp4">
+    </video>
+    <div id="audio-background">
+      <div id="music-controls">
+        <input type="range" id="volume-slider" min="0" max="100" value="50">
+        <div id="progress-container">
+          <div id="progress-bar"></div>
         </div>
-    </header>
-
-    <section class="hero">
-        <div class="container">
-            <div class="hero-left">
-                <div class="hero-sub">
-                    <i class="fas fa-sparkles"></i> Trải nghiệm xu hướng mới nhất
-                </div>
-                <h1>Mạng xã hội<br />thế hệ mới <span>NovaTech</span></h1>
-                <p>Kết nối cộng đồng, chia sẻ khoảnh khắc sống động và tối ưu hóa trải nghiệm tương tác thông minh trên mọi thiết bị.</p>
-                <div class="hero-btns">
-                    <a href="#" class="btn-primary">Bắt đầu ngay <i class="fas fa-arrow-right"></i></a>
-                    <a href="#" class="btn-secondary"><i class="fas fa-play"></i> Xem giới thiệu</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat-box">
-                        <h3>36k+</h3>
-                        <p>Thành viên tích cực</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>180+</h3>
-                        <p>Quốc gia hỗ trợ</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>3.6K</h3>
-                        <p>Đánh giá 5 sao</p>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-right">
-                <div class="hero-visual">
-                    <div class="visual-bg"></div>
-                    <div class="mockup-card">
-                        <div class="mockup-header">
-                            <div class="mockup-user">
-                                <div class="mockup-avatar"></div>
-                                <div class="mockup-name"></div>
-                            </div>
-                            <div class="mockup-badge"></div>
-                        </div>
-                        <div class="mockup-body">
-                            <div class="mockup-item active">
-                                <i class="fas fa-image"></i>
-                            </div>
-                            <div class="mockup-item">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <div class="mockup-item">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+    </div>
+  </div>
+  <div id="video-overlay"></div>
+  <div id="blurred-box" class="tilt-element">
+    <img id="profile-picture" src="./assets/pfp/default.png" alt="Profile Picture">
+    <img id="avatar-frame" src="./assets/pfp/frame.png" alt="Avatar Frame">
+    <p id="username-container" style="color: white; font-weight: bold; font-size: 32px;">
+      <span id="username">Kru_alien</span>  
+      <span id="typing-cursor">|</span>
+    </p>
+    <div class="badges-container">
+      <img src="./assets/badge/developer.png" alt="dev badge">
+      <img src="./assets/badge/verified.png" alt="verified badge">
+    </div>
+    <div class="lang-container">
+      <img src="./assets/logo/python.png" alt="python">
+      <img src="./assets/logo/img_js.png" alt="javascript">
+    </div>
+    <div class="user-description">
+      <p id="user-description" style="color: white;">
+        Hello, I'm Kru_alien,<br>
+        a coder with medium experience. I want to learn more from the internet and improve my skills.
+      </p>
+    </div>
+    <div class="discord-widget">
+      <div class="discord-content">
+        <div class="discord-icon">
+          <img id="discord-avatar" src="" alt="Discord Avatar" draggable="false" loading="lazy">
         </div>
-    </section>
-
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-header">
-                <h2>Tính năng nổi bật</h2>
-                <p>Khám phá hệ sinh thái công nghệ giúp bạn kết nối nhanh chóng và an toàn hơn.</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3>Giao diện tối giản</h3>
-                    <p>Thiết kế hiện đại, tinh gọn giúp tối ưu không gian hiển thị và tập trung vào trải nghiệm cốt lõi.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>Tốc độ vượt trội</h3>
-                    <p>Hệ thống xử lý thông tin thời gian thực đảm bảo mọi tương tác diễn ra mượt mà tức thì.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Bảo mật nâng cao</h3>
-                    <p>Mã hóa dữ liệu đầu cuối giúp bảo vệ thông tin cá nhân và quyền riêng tư tuyệt đối.</p>
-                </div>
-            </div>
+        <div class="discord-meta">
+          <b id="discord-username"></b>  
+          <div>
+            <span id="discord-status-dot"></span>
+            <span id="discord-status-text"></span>
+          </div>
         </div>
-    </section>
-
-    <section class="platforms" id="platforms">
-        <div class="container">
-            <div class="section-header">
-                <h2>Hỗ trợ đa nền tảng</h2>
-                <p>Tương thích mạnh mẽ và tích hợp mượt mà với các mạng xã hội phổ biến hiện nay.</p>
-            </div>
-            <div class="platforms-content">
-                <div class="platform-item">
-                    <i class="fab fa-tiktok"></i>
-                    <div class="platform-info">
-                        <h3>TikTok Integration</h3>
-                        <p>Đồng bộ dữ liệu xu hướng, video ngắn nhanh chóng và tối ưu thuật toán hiển thị.</p>
-                    </div>
-                </div>
-                <div class="platform-item">
-                    <i class="fab fa-youtube"></i>
-                    <div class="platform-info">
-                        <h3>YouTube Shorts</h3>
-                        <p>Quản lý và cập nhật nội dung chất lượng cao trực tiếp từ studio sáng tạo của bạn.</p>
-                    </div>
-                </div>
-                <div class="platform-item">
-                    <i class="fab fa-facebook"></i>
-                    <div class="platform-info">
-                        <h3>Facebook Connect</h3>
-                        <p>Chia sẻ khoảnh khắc đến bạn bè và hội nhóm chỉ với một cú chạm duy nhất.</p>
-                    </div>
-                </div>
-                <div class="platform-item">
-                    <i class="fab fa-instagram"></i>
-                    <div class="platform-info">
-                        <h3>Instagram Stories</h3>
-                        <p>Bộ lọc hình ảnh thông minh nâng tầm tính thẩm mỹ cho từng khung hình bài đăng.</p>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="discord-activity">
+        <div id="discord-activity-info">
+          <div id="discord-album-art"></div>
+          <div class="discord-activity-content">
+            <div id="discord-activity-name"></div>
+            <div id="discord-activity-details"></div>
+            <div id="discord-activity-state"></div>
+          </div>
         </div>
-    </section>
+        <div id="discord-no-activity">I'm not currently doing anything!</div>
+      </div>
+    </div>
+    
+    <div class="links">
+      <!-- Discord -->
+      <a href="http://discordapp.com/users/1028148845399511141" target="_blank">  
+        <svg width="40" height="40" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#5865F2" d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-.09 56.6.06 80.21a113 113 0 0 0 33.09 16.59 77.06 77.06 0 0 0 6.75-10.3 70.33 70.33 0 0 1-10.81-5.14c.91-.66 1.8-1.34 2.66-2.03a73.3 73.3 0 0 0 62.36 0c.87.69 1.75 1.37 2.66 2.03a70.5 70.5 0 0 1-10.82 5.14 77 77 0 0 0 6.75 10.3 113 113 0 0 0 33.08-16.59c.18-23.61-2.7-47.56-12.43-72.14zM42.45 65.69C38.49 65.69 35 62.42 35 58.32a7.37 7.37 0 0 1 7.45-7.37c4 0 7.45 3.29 7.45 7.37s-3.49 7.37-7.45 7.37zm42.24 0c-4 0-7.45-3.29-7.45-7.37s3.49-7.37 7.45-7.37 7.45 3.29 7.45 7.37-3.49 7.37-7.45 7.37z"/>
+        </svg>
+      </a>
 
-    <section class="cta">
-        <div class="container">
-            <div class="cta-box">
-                <div class="cta-bg-glow"></div>
-                <h2>Sẵn sàng trải nghiệm cùng NovaTech?</h2>
-                <p>Tham gia cộng đồng công nghệ thông minh ngay hôm nay để không bỏ lỡ các đặc quyền nâng cao hoàn toàn miễn phí.</p>
-                <a href="#" class="btn-cta">Bắt đầu dùng thử</a>
-            </div>
-        </div>
-    </section>
+      <!-- Roblox -->
+      <a href="https://www.roblox.com/users/4095830351/profile" target="_blank" title="Roblox">
+        <svg width="40" height="40" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <image width="512" height="512" xlink:href="https://upload.wikimedia.org/wikipedia/commons/7/70/Roblox_Corporation_2025_logo.svg"></image>
+        </svg>
+      </a>
+    </div>
 
-    <footer>
-        <div class="container">
-            <div class="footer-logo">
-                <div class="logo-icon-wrapper">
-                    <div class="logo-arrow"></div>
-                    <div class="logo-orbit"></div>
-                    <div class="logo-dot"></div>
-                </div>
-                Nova<span>Tech</span>
-            </div>
-            <div class="footer-contact">
-                <i class="fas fa-envelope"></i> Liên hệ: <a href="mailto:novatech.trio@gmail.com">novatech.trio@gmail.com</a>
-            </div>
-            <p>&copy; 2026 NovaTech Trio. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        const menuToggle = document.getElementById('menu-toggle');
-        const navMenu = document.getElementById('nav-menu');
-
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            if (navMenu.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-
-        const featureCards = document.querySelectorAll('.feature-card');
-        const featureObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        featureCards.forEach(card => {
-            featureObserver.observe(card);
-        });
-
-        const platformItems = document.querySelectorAll('.platform-item');
-        const platformObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 150);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        platformItems.forEach(item => {
-            platformObserver.observe(item);
-        });
-
-        const ctaSection = document.querySelector('.cta-box');
-        const ctaObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-
-        if (ctaSection) {
-            ctaObserver.observe(ctaSection);
-        }
-    </script>
+  </div>
+  <script src="./assets/js/lanyard.js"></script>  
+  <script src="./assets/js/discord.js"></script>
+  <script src="./assets/js/script.js"></script>
+  <script src="./assets/js/title.js"></script>
+  <script src="./assets/js/username-animation.js"></script>
+  <script src="./assets/js/tilt-effect.js"></script>
+  <script src="./assets/js/audio-visualizer.js"></script>
+  <script src="./assets/js/neko.js"></script>
+  <script src="./assets/js/neko-init.js"></script>
+  <script src="./assets/js/music.js"></script>
 </body>
 </html>
